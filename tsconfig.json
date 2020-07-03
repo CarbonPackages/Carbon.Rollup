@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "typeRoots": ["./node_modules/@types/", "./DistributionPackages/**/Resources/Private/Fusion", "globals.d.ts"],
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
+    }
+}
