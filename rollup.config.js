@@ -15,7 +15,7 @@ if (isProduction) {
 }
 
 let files = [];
-packages.forEach(({ packageName, filenames, folder = 'Fusion', inline = false, sourcemap = true, format = 'iife', alias = null }) => {
+packages.forEach(({ packageName, filenames, inputFolder = 'Fusion', inline = false, sourcemap = true, format = 'iife', alias = null }) => {
     if (!packageName || !filenames) {
         return;
     }
@@ -27,7 +27,7 @@ packages.forEach(({ packageName, filenames, folder = 'Fusion', inline = false, s
         files.push({
             packageName,
             filename,
-            inputFolder: folder,
+            inputFolder,
             inline,
             sourcemap,
             format,
