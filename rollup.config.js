@@ -7,7 +7,6 @@ import commonjs from '@rollup/plugin-commonjs';
 import license from 'rollup-plugin-license';
 import postcss from 'rollup-plugin-postcss';
 import notify from 'rollup-plugin-notify';
-import scss from 'rollup-plugin-scss';
 import packages from './rollup.packages.js';
 
 const isProduction = process.env.production;
@@ -16,7 +15,7 @@ if (isProduction) {
 }
 
 let files = [];
-packages.forEach(({ packageName, filenames, inline = false, sourcemap = true, format = 'iife', alias = null }) => {
+packages.forEach(({ packageName, filenames, inputFolder = 'Fusion', inline = false, sourcemap = true, format = 'iife', alias = null }) => {
     if (!packageName || !filenames) {
         return;
     }
@@ -28,6 +27,7 @@ packages.forEach(({ packageName, filenames, inline = false, sourcemap = true, fo
         files.push({
             packageName,
             filename,
+            inputFolder,
             inline,
             sourcemap,
             format,
@@ -47,7 +47,7 @@ function folder(packageName, folder = 'private') {
 async function config() {
     const terser = isProduction && (await import('rollup-plugin-terser'));
     return Promise.all(
-        files.map(async ({ packageName, filename, inline, sourcemap, format, customAlias }) => {
+        files.map(async ({ packageName, filename, inputFolder, inline, sourcemap, format, customAlias }) => {
             const lastIndexOfDot = filename.lastIndexOf('.');
             const baseFilename = filename.substring(0, lastIndexOfDot);
             const fileExtension = filename.substring(lastIndexOfDot + 1);
@@ -70,7 +70,7 @@ async function config() {
                 : `${folder(packageName, 'public')}/${targetFolder}/${baseFilename}.${targetFileextension}`;
 
             return {
-                input: `${folder(packageName, 'private')}/Fusion/${filename}`,
+                input: `${folder(packageName, 'private')}/${inputFolder}/${filename}`,
                 watch: {
                     include: `${folder(packageName, 'private')}/**/*.${watchFiles}`
                 },
