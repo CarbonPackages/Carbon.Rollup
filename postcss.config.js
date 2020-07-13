@@ -10,24 +10,24 @@ module.exports = ({ options }) => ({
             cachebuster: false,
             basePath: 'DistributionPackages/',
             baseUrl: '/_Resources/Static/Packages',
-            loadPaths: ['**/Resources/Public/**/*']
+            loadPaths: ['**/Resources/Public/**/*'],
         },
         'postcss-url': {
             filter: /\/_Resources\/Static\/Packages\/[\w]+\.[\w]+\/Resources\/Public\/.*/,
-            url: asset => asset.url.replace('/Resources/Public/', '/')
+            url: (asset) => asset.url.replace('/Resources/Public/', '/'),
         },
         'postcss-normalize': {
             allowDuplicates: false,
-            forceImport: false
+            forceImport: false,
         },
         'postcss-preset-env': {
             stage: 1,
-            autoprefixer: false
+            autoprefixer: false,
         },
         'postcss-easing-gradients': {
             colorStops: 15,
             alphaDecimals: 5,
-            colorMode: 'lrgb'
+            colorMode: 'lrgb',
         },
         'postcss-hexrgba': true,
         'postcss-clip-path-polyfill': true,
@@ -41,17 +41,17 @@ module.exports = ({ options }) => ({
         autoprefixer: true,
         cssnano: options.production
             ? {
-                  preset: ['default', { discardComments: { removeAll: true } }]
+                  preset: ['default', { discardComments: { removeAll: true } }],
               }
             : false,
         'postcss-banner': options.banner
             ? {
                   banner: options.banner,
-                  inline: true
+                  inline: true,
               }
             : false,
         'postcss-reporter': {
-            clearReportedMessages: true
-        }
-    }
+            clearReportedMessages: true,
+        },
+    },
 });
