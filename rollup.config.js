@@ -14,27 +14,90 @@ if (isProduction) {
     process.env.NODE_ENV = 'production';
 }
 
-let files = [];
-packages.forEach(({ packageName, filenames, inputFolder = 'Fusion', inline = false, sourcemap = true, format = 'iife', alias = null }) => {
-    if (!packageName || !filenames) {
-        return;
-    }
-    const customAlias = alias;
-    if (inline) {
-        sourcemap = false;
-    }
-    filenames.forEach(filename => {
-        files.push({
-            packageName,
-            filename,
-            inputFolder,
-            inline,
-            sourcemap,
-            format,
-            customAlias
-        });
-    });
+const aliasFolders = ['DistributionPackages', 'Packages'];
+const extensions = {
+    css: ['.pcss', '.scss', '.sass', '.less', '.styl', '.css'],
+    js: ['.mjs', '.js', '.jsx', '.mts', '.ts', '.tsx', '.json'],
+};
+
+const watchExtensions = {};
+for (const key in extensions) {
+    watchExtensions[key] = '{' + extensions[key].join(',').replace(/\./g, '') + '}';
+}
+
+const defaultAliasResolver = resolve({
+    extensions: [...extensions.js, ...extensions.css],
 });
+
+const defaultAliasEntries = aliasFolders.map((folder) => {
+    return {
+        find: folder,
+        replacement: path.resolve(__dirname, folder),
+    };
+});
+
+const cssAliasResolverOptions = (() => {
+    const alias = {};
+    aliasFolders.forEach((folder) => {
+        alias[folder] = path.resolve(__dirname, folder);
+    });
+    return {
+        alias,
+        extensions: extensions.css,
+        dontPrefix: true,
+    };
+})();
+
+let files = [];
+packages.forEach(
+    ({
+        packageName,
+        filenames,
+        inputFolder = 'Fusion',
+        inline = false,
+        sourcemap = true,
+        format = 'iife',
+        alias = null,
+    }) => {
+        if (!packageName || !filenames) {
+            return;
+        }
+
+        // Set up alias
+        let aliasFromPackage = [];
+        if (Array.isArray(alias)) {
+            aliasFromPackage = alias;
+        } else {
+            for (const key in alias) {
+                aliasFromPackage.push({
+                    find: key,
+                    replacement: alias[key],
+                });
+            }
+        }
+        const customAlias = {
+            entries: [...defaultAliasEntries, ...aliasFromPackage],
+            defaultResolver: defaultAliasResolver,
+        };
+
+        // Disable sourcemaps on inline documents
+        if (inline) {
+            sourcemap = false;
+        }
+
+        filenames.forEach((filename) => {
+            files.push({
+                packageName,
+                filename,
+                inputFolder,
+                inline,
+                sourcemap,
+                format,
+                customAlias,
+            });
+        });
+    }
+);
 
 function folder(packageName, folder = 'private') {
     const base = path.join('DistributionPackages', packageName, 'Resources');
@@ -52,12 +115,12 @@ async function config() {
             const baseFilename = filename.substring(0, lastIndexOfDot);
             const fileExtension = filename.substring(lastIndexOfDot + 1);
             const licenseFilename = `${filename}.license`;
-            const extractCSS = fileExtension.endsWith('css');
+            const extractCSS = (() => extensions.css.some((suffix) => filename.endsWith(suffix)))();
             const targetFileextension = extractCSS ? 'css' : 'js';
             const targetFolder = extractCSS ? 'Styles' : 'Scripts';
             const banner = `${filename} from ${packageName}`;
             const licenseBanner = `For license information please see ${licenseFilename}`;
-            const watchFiles = extractCSS ? '{scss,pcss}' : '{js,jsx,ts,tsx}';
+            const watchFiles = extractCSS ? watchExtensions.css : watchExtensions.js;
 
             const isTypescript = fileExtension.match(/tsx?/);
             // Import babel / typescript only if needed
@@ -72,7 +135,7 @@ async function config() {
             return {
                 input: `${folder(packageName, 'private')}/${inputFolder}/${filename}`,
                 watch: {
-                    include: `${folder(packageName, 'private')}/**/*.${watchFiles}`
+                    include: `${folder(packageName, 'private')}/**/*.${watchFiles}`,
                 },
                 onwarn: (warning, warn) => {
                     if (warning.code === 'FILE_NAME_CONFLICT' && extractCSS) {
@@ -83,15 +146,11 @@ async function config() {
                 plugins: [
                     beep(),
                     notify(),
-                    customAlias
-                        ? alias({
-                              entries: customAlias
-                          })
-                        : null,
+                    alias(customAlias),
                     resolve({
                         module: true,
                         jsnext: true,
-                        preferBuiltins: false
+                        preferBuiltins: false,
                     }),
                     commonjs({ include: 'node_modules/**' }),
                     extractCSS
@@ -101,28 +160,28 @@ async function config() {
                                   ? {}
                                   : {
                                         exclude: 'node_modules/**', // only transpile our source code
-                                        babelHelpers: 'bundled'
+                                        babelHelpers: 'bundled',
                                     }
                           ),
                     json(),
                     postcss({
-                        modules: true,
                         extract: extractCSS,
-                        extensions: ['.pcss', '.scss'],
-                        use: ['sass'],
+                        extensions: ['.pcss', '.scss', '.less', '.styl'],
+                        use: ['sass', 'stylus', 'less'],
                         config: {
                             ctx: {
+                                resolver: cssAliasResolverOptions,
                                 production: isProduction,
-                                banner: extractCSS ? banner : null
-                            }
+                                banner: extractCSS ? banner : null,
+                            },
                         },
-                        sourceMap: sourcemap
+                        sourceMap: extractCSS ? sourcemap : false,
                     }),
                     terser
                         ? terser.terser({
                               output: {
-                                  comments: false
-                              }
+                                  comments: false,
+                              },
                           })
                         : null,
                     inline
@@ -133,25 +192,25 @@ async function config() {
                                   commentStyle: 'none',
                                   data: {
                                       banner,
-                                      licenseBanner
+                                      licenseBanner,
                                   },
                                   content: `// <%= data.banner %><% if (dependencies.length) { %>
-// <%= data.licenseBanner %><% } %>`
+// <%= data.licenseBanner %><% } %>`,
                               },
                               thirdParty: {
                                   output: {
-                                      file: `${folder(packageName, 'public')}/${targetFolder}/${licenseFilename}`
-                                  }
-                              }
-                          })
-                ].filter(item => !!item),
+                                      file: `${folder(packageName, 'public')}/${targetFolder}/${licenseFilename}`,
+                                  },
+                              },
+                          }),
+                ].filter((item) => !!item),
                 output: {
                     sourcemapExcludeSources: !isProduction,
                     sourcemap: sourcemap,
                     file: outputFilename,
                     format: format,
-                    name: `${packageName}.${baseFilename}.${targetFileextension}`
-                }
+                    name: `${packageName}.${baseFilename}.${targetFileextension}`,
+                },
             };
         })
     );
