@@ -1,8 +1,9 @@
+const resolver = require('postcss-import-alias-resolver');
+
 module.exports = ({ options }) => ({
     plugins: {
-        'postcss-easy-import': {
-            prefix: '_',
-            extensions: ['.pcss', '.css']
+        'postcss-import': {
+            resolve: resolver(options.resolver),
         },
         tailwindcss: true,
         'postcss-nested': true,
