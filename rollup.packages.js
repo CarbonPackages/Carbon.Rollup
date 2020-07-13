@@ -11,7 +11,7 @@
  */
 
 export default [
-    { packageName: 'Schuetz.Theme', filenames: ['Main.pcss', 'Test.scss'] },
-    { packageName: 'Schuetz.Theme', filenames: ['Main.ts', 'TrackingOptions.ts'], inline: true },
-    { packageName: 'Schuetz.Slider', filenames: ['Main.ts'] }
+    { packageName: 'Vendor.Theme', filenames: ['Main.pcss', 'Test.scss'] },
+    { packageName: 'Vendor.Theme', filenames: ['Main.ts', 'TrackingOptions.ts'], inline: true },
+    { packageName: 'Vendor.Slider', filenames: ['Main.ts'] },
 ];
