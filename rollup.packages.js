@@ -2,7 +2,7 @@
  * Pass an object with the following properties to the array:
  *
  * packageName   <string>  (required) The name of the package
- * filenames      <array>   (required) The names of the entry files
+ * filenames     <array>   (required) The names of the entry files
  * inputFolder   <string>  (optional) (default: `Fusion`) The inputFolder where to look for the entry files
  * inline        <boolean> (optional) (default: `false`) Flag to toggle if the files should be written to `Resources/Private/Templates/InlineAssets`
  * sourcemap     <boolean> (optional) (default: `true`) Flag to toggle source map generation
