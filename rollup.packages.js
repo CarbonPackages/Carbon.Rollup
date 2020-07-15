@@ -11,7 +11,7 @@
  */
 
 export default [
-    { packageName: 'Vendor.Theme', filenames: ['Main.pcss', 'Test.scss'] },
-    { packageName: 'Vendor.Theme', filenames: ['Main.ts', 'TrackingOptions.ts'], inline: true },
-    { packageName: 'Vendor.Slider', filenames: ['Main.ts'] },
+    { packageName: "Vendor.Theme", filenames: ["Main.pcss", "Test.scss"] },
+    { packageName: "Vendor.Theme", filenames: ["Main.ts", "TrackingOptions.ts"], inline: true },
+    { packageName: "Vendor.Slider", filenames: ["Main.ts"] },
 ];

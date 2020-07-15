@@ -1,28 +1,28 @@
-import path from 'path';
-import alias from '@rollup/plugin-alias';
-import json from '@rollup/plugin-json';
-import beep from '@rollup/plugin-beep';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import license from 'rollup-plugin-license';
-import postcss from 'rollup-plugin-postcss';
-import notify from 'rollup-plugin-notify';
-import packages from './rollup.packages.js';
+import path from "path";
+import alias from "@rollup/plugin-alias";
+import json from "@rollup/plugin-json";
+import beep from "@rollup/plugin-beep";
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import license from "rollup-plugin-license";
+import postcss from "rollup-plugin-postcss";
+import notify from "rollup-plugin-notify";
+import packages from "./rollup.packages.js";
 
 const isProduction = process.env.production;
 if (isProduction) {
-    process.env.NODE_ENV = 'production';
+    process.env.NODE_ENV = "production";
 }
 
-const aliasFolders = ['DistributionPackages', 'Packages'];
+const aliasFolders = ["DistributionPackages", "Packages"];
 const extensions = {
-    css: ['.pcss', '.scss', '.sass', '.less', '.styl', '.css'],
-    js: ['.mjs', '.js', '.jsx', '.mts', '.ts', '.tsx', '.json'],
+    css: [".pcss", ".scss", ".sass", ".less", ".styl", ".css"],
+    js: [".js", ".jsx", ".mjs", ".mjsx", ".ts", ".tsx", ".mts", ".mtsx", ".vue", ".mvue", ".json"],
 };
 
 const watchExtensions = {};
 for (const key in extensions) {
-    watchExtensions[key] = '{' + extensions[key].join(',').replace(/\./g, '') + '}';
+    watchExtensions[key] = "{" + extensions[key].join(",").replace(/\./g, "") + "}";
 }
 
 const defaultAliasResolver = resolve({
@@ -53,10 +53,10 @@ packages.forEach(
     ({
         packageName,
         filenames,
-        inputFolder = 'Fusion',
+        inputFolder = "Fusion",
         inline = false,
         sourcemap = true,
-        format = 'iife',
+        format = "iife",
         alias = null,
     }) => {
         if (!packageName || !filenames) {
@@ -99,46 +99,46 @@ packages.forEach(
     }
 );
 
-function folder(packageName, folder = 'private') {
-    const base = path.join('DistributionPackages', packageName, 'Resources');
-    if (folder === 'inline') {
-        return path.join(base, 'Private/Templates/InlineAssets');
+function folder(packageName, folder = "private") {
+    const base = path.join("DistributionPackages", packageName, "Resources");
+    if (folder === "inline") {
+        return path.join(base, "Private/Templates/InlineAssets");
     }
     return path.join(base, folder.charAt(0).toUpperCase() + folder.slice(1));
 }
 
 async function config() {
-    const terser = isProduction && (await import('rollup-plugin-terser'));
+    const terser = isProduction && (await import("rollup-plugin-terser"));
     return Promise.all(
         files.map(async ({ packageName, filename, inputFolder, inline, sourcemap, format, customAlias }) => {
-            const lastIndexOfDot = filename.lastIndexOf('.');
+            const lastIndexOfDot = filename.lastIndexOf(".");
             const baseFilename = filename.substring(0, lastIndexOfDot);
             const fileExtension = filename.substring(lastIndexOfDot + 1);
             const licenseFilename = `${filename}.license`;
             const extractCSS = (() => extensions.css.some((suffix) => filename.endsWith(suffix)))();
-            const targetFileextension = extractCSS ? 'css' : 'js';
-            const targetFolder = extractCSS ? 'Styles' : 'Scripts';
+            const targetFileextension = extractCSS ? "css" : "js";
+            const targetFolder = extractCSS ? "Styles" : "Scripts";
             const banner = `${filename} from ${packageName}`;
             const licenseBanner = `For license information please see ${licenseFilename}`;
             const watchFiles = extractCSS ? watchExtensions.css : watchExtensions.js;
 
-            const isTypescript = fileExtension.match(/tsx?/);
+            const isTypescript = fileExtension.match(/m?tsx?/);
             // Import babel / typescript only if needed
             const parser = extractCSS
                 ? null
-                : await import(isTypescript ? '@wessberg/rollup-plugin-ts' : '@rollup/plugin-babel');
+                : await import(isTypescript ? "@wessberg/rollup-plugin-ts" : "@rollup/plugin-babel");
 
             const outputFilename = inline
-                ? `${folder(packageName, 'inline')}/${baseFilename}.${targetFileextension}`
-                : `${folder(packageName, 'public')}/${targetFolder}/${baseFilename}.${targetFileextension}`;
+                ? `${folder(packageName, "inline")}/${baseFilename}.${targetFileextension}`
+                : `${folder(packageName, "public")}/${targetFolder}/${baseFilename}.${targetFileextension}`;
 
             return {
-                input: `${folder(packageName, 'private')}/${inputFolder}/${filename}`,
+                input: `${folder(packageName, "private")}/${inputFolder}/${filename}`,
                 watch: {
-                    include: `${folder(packageName, 'private')}/**/*.${watchFiles}`,
+                    include: `${folder(packageName, "private")}/**/*.${watchFiles}`,
                 },
                 onwarn: (warning, warn) => {
-                    if (warning.code === 'FILE_NAME_CONFLICT' && extractCSS) {
+                    if (warning.code === "FILE_NAME_CONFLICT" && extractCSS) {
                         return;
                     }
                     warn(warning);
@@ -152,22 +152,22 @@ async function config() {
                         jsnext: true,
                         preferBuiltins: false,
                     }),
-                    commonjs({ include: 'node_modules/**' }),
+                    commonjs({ include: "node_modules/**" }),
                     extractCSS
                         ? null
                         : parser.default(
                               isTypescript
                                   ? {}
                                   : {
-                                        exclude: 'node_modules/**', // only transpile our source code
-                                        babelHelpers: 'bundled',
+                                        exclude: "node_modules/**", // only transpile our source code
+                                        babelHelpers: "bundled",
                                     }
                           ),
                     json(),
                     postcss({
                         extract: extractCSS,
-                        extensions: ['.pcss', '.scss', '.less', '.styl'],
-                        use: ['sass', 'stylus', 'less'],
+                        extensions: [".pcss", ".scss", ".less", ".styl"],
+                        use: ["sass", "stylus", "less"],
                         config: {
                             ctx: {
                                 resolver: cssAliasResolverOptions,
@@ -189,7 +189,7 @@ async function config() {
                         : license({
                               sourcemap: sourcemap,
                               banner: {
-                                  commentStyle: 'none',
+                                  commentStyle: "none",
                                   data: {
                                       banner,
                                       licenseBanner,
@@ -199,7 +199,7 @@ async function config() {
                               },
                               thirdParty: {
                                   output: {
-                                      file: `${folder(packageName, 'public')}/${targetFolder}/${licenseFilename}`,
+                                      file: `${folder(packageName, "public")}/${targetFolder}/${licenseFilename}`,
                                   },
                               },
                           }),
