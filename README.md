@@ -6,7 +6,7 @@
 
 ## Usage of CSS Pre-Processors
 
-If you want to use [Sass, Scss][sass], [Less] or [stylus] you have to add to correspondig package to your setup.
+If you want to use [Sass, Scss][sass], [Less] or [stylus] you have to add to the corresponding package to your setup.
 
 - For [Sass or Scss][sass] enter `yarn add --dev node-sass`
 - For [Less] enter `yarn add --dev less`
@@ -44,7 +44,7 @@ To enable the correct linting, edit [`.eslintrc`]:
 }
 ```
 
-If you don't use Javascript at all, you can remove `@rollup/plugin-babel` with following command:
+If you don't use Javascript at all, you can remove `@rollup/plugin-babel` with the following command:
 
 ```bash
 yarn remove @rollup/plugin-babel
