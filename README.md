@@ -1,6 +1,6 @@
 # Carbon.Rollup
 
-[![Download]][master.zip] [![Template]][generate] ![David] [![GitHub stars]][stargazers] [![GitHub watchers]][subscription] [![GitHub license]][license] [![GitHub issues]][issues] [![GitHub forks]][network] [![Twitter]][tweet] [![Sponsor @Jonnitto on GitHub]][sponsor]
+[![Download]][master.zip] [![Template]][generate] [![David]][david-dm] [![GitHub stars]][stargazers] [![GitHub watchers]][subscription] [![GitHub license]][license] [![GitHub issues]][issues] [![GitHub forks]][network] [![Twitter]][tweet] [![Sponsor @Jonnitto on GitHub]][sponsor]
 
 **Carbon.Rollup is a delicious blend of tasks and build tools poured into Rollup to form a full-featured modern asset pipeline for Flow Framework and [Neos CMS].**
 
@@ -51,6 +51,7 @@ yarn remove @rollup/plugin-babel
 ```
 
 [david]: https://img.shields.io/david/dev/CarbonPackages/Carbon.Rollup
+[david-dm]: https://david-dm.org/CarbonPackages/Carbon.Rollup?type=dev
 [github issues]: https://img.shields.io/github/issues/CarbonPackages/Carbon.Rollup
 [issues]: https://github.com/CarbonPackages/Carbon.Rollup/issues
 [github forks]: https://img.shields.io/github/forks/CarbonPackages/Carbon.Rollup
