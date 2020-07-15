@@ -1,16 +1,7 @@
 {
-  "extends": ["prettier"],
-  "plugins": ["prettier"],
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
   "env": {
-    "es8": true
-  },
-  "rules": {
-    "prettier/prettier": "error"
+    "es6": true,
+    "node": true
   }
 }
