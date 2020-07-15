@@ -1,4 +1,4 @@
-# Carbon.Rollup
+![Carbon.Rollup – Build stack for Neos CMS][preview]
 
 [![Download]][master.zip] [![Template]][generate] [![David]][david-dm] [![GitHub stars]][stargazers] [![GitHub watchers]][subscription] [![GitHub license]][license] [![GitHub issues]][issues] [![GitHub forks]][network] [![Twitter]][tweet] [![Sponsor @Jonnitto on GitHub]][sponsor]
 
@@ -93,6 +93,7 @@ If you don't use Javascript at all, you can remove `@rollup/plugin-babel` with t
 yarn remove @rollup/plugin-babel
 ```
 
+[preview]: https://repository-images.githubusercontent.com/276846965/b977e000-c6db-11ea-9cd8-18040e6a19d8
 [david]: https://img.shields.io/david/dev/CarbonPackages/Carbon.Rollup
 [david-dm]: https://david-dm.org/CarbonPackages/Carbon.Rollup?type=dev
 [github issues]: https://img.shields.io/github/issues/CarbonPackages/Carbon.Rollup
