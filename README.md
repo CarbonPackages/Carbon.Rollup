@@ -4,9 +4,44 @@
 
 **Carbon.Rollup is a delicious blend of tasks and build tools poured into Rollup to form a full-featured modern asset pipeline for Flow Framework and [Neos CMS].**
 
-## Usage of CSS Pre-Processors
+This repository is meant to use as a template for your project. Download the files and copy them into your [Neos CMS] mono repository. After that, you've got the freedom to adjust the configuration (edit/remove/add) to your specific needs.
 
-If you want to use [Sass, Scss][sass], [Less] or [stylus] you have to add to the corresponding package to your setup.
+## Add files to the build stack
+
+The entry files of your Neos repository is configured in [`rollup.packages.js`]. The entries are set up in an array, and a single entry is an object with following options:
+
+| Key           | Type      | required | Description                                                                    | Default    | Example                    |
+| ------------- | --------- | :------: | ------------------------------------------------------------------------------ | ---------- | -------------------------- |
+| `packageName` | `string`  |    ✓     | The name of the package                                                        |            | `"Vendor.Foo"`             |
+| `filenames`   | `array`   |    ✓     | The names of the entry files                                                   |            | `["Main.js", "Main.pcss"]` |
+| `inputFolder` | `string`  |          | The folder under `Resources/Private` where to look for the entry files         | `"Fusion"` | `"Assets"`                 |
+| `inline`      | `boolean` |          | Flag to toggle if the files should be inlined. If set, sourcemaps are disabled | `false`    | `true`                     |
+| `sourcemap`   | `boolean` |          | Flag to toggle source map generation                                           | `true`     | `false`                    |
+| `format`      | `string`  |          | Set the format of the output file. [Read more][rollup outputformat]            | `"iife"`   | `"umd"`                    |
+| `alias`       | `string`  |          | Add your own, package-specific alias                                           | `{}`       | `{react: "preact/compat"}` |
+
+- Inline files will be written to `Resources/Private/Templates/InlineAssets`.
+- If you want to inject the styles via JavaScript, you can import your styles directly into your JS file (e.g. `import ./Component/Header.pcss`)
+
+## Yarn Task
+
+There are three predefined tasks:
+
+| Scripts         | Description                              | Optimze file size | Command                                                 |
+| --------------- | ---------------------------------------- | :---------------: | ------------------------------------------------------- |
+| `yarn start`    | Start the file watcher                   |                   | `rollup --config --watch`                               |
+| `yarn build`    | Build the files once                     |                   | `rollup --config`                                       |
+| `yarn pipeline` | Run install, build and optimze file size |         ✓         | `yarn install;rollup --config --environment production` |
+
+## CSS
+
+### PostCSS
+
+This template comes with a variety of PostCSS Plugins. Feel free to remove some or add your own favorites packages. The configuration is located in [`postcss.config.js`]. The suffix of these files should be `.pcss`.
+
+### Usage of CSS Pre-Processors
+
+If you want to use [Sass, Scss][sass], [Less], or [stylus], you have to add to the corresponding package to your setup.
 
 - For [Sass or Scss][sass] enter `yarn add --dev node-sass`
 - For [Less] enter `yarn add --dev less`
@@ -14,7 +49,15 @@ If you want to use [Sass, Scss][sass], [Less] or [stylus] you have to add to the
 
 > Note: If you want to use [stylus], you have to set [.nvmrc] to `13`, as there is a bug with node 14
 
-## Usage of TypeScript
+### Tailwind CSS
+
+This setup comes with [Tailwind CSS], a highly customizable, low-level CSS framework. An example configuration is provided in [`tailwind.config.js`]. The setup for purge the CSS files is also configured. [Read more about controlling the file size here.][tailwind file-size]. To remove unused CSS styles, simply run `yarn pipeline`.
+
+By the way: [Alpine.js] is excellent in combination with [Tailwind CSS].
+
+## Javascript
+
+### Usage of TypeScript
 
 If you want TypeScript, add following packages to `package.json`:
 
@@ -77,3 +120,10 @@ yarn remove @rollup/plugin-babel
 [.nvmrc]: .nvmrc
 [`babel.config.js`]: babel.config.js
 [`.eslintrc`]: .eslintrc
+[`rollup.packages.js`]: rollup.packages.js
+[rollup outputformat]: https://rollupjs.org/guide/en/#outputformat
+[`postcss.config.js`]: postcss.config.js
+[tailwind css]: https://tailwindcss.com
+[alpine.js]: https://github.com/alpinejs/alpine
+[`tailwind.config.js`]: tailwind.config.js
+[tailwind file-size]: https://tailwindcss.com/docs/controlling-file-size
