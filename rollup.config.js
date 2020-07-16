@@ -131,7 +131,7 @@ async function config() {
             return {
                 input: `${folder(packageName, "private")}/${inputFolder}/${filename}`,
                 watch: {
-                    include: `${folder(packageName, "private")}/**/*.${watchFiles}`,
+                    exclude: "node_modules/**",
                 },
                 onwarn: (warning, warn) => {
                     if (warning.code === "FILE_NAME_CONFLICT" && extractCSS) {
