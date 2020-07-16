@@ -95,7 +95,7 @@ If you want to use [Sass, Scss][sass], [Less], or [stylus], you have to add to t
 
 ### Tailwind CSS
 
-This setup comes with [Tailwind CSS], a highly customizable, low-level CSS framework. An example configuration is provided in [`tailwind.config.js`]. The setup for purge the CSS files is also configured. [Read more about controlling the file size here.][tailwind file-size]. To remove unused CSS styles, simply run `yarn pipeline`.
+This setup comes with [Tailwind CSS], a highly customizable, low-level CSS framework. An example configuration is provided in [`tailwind.config.js`]. The setup for purge the CSS files is also configured. [Read more about controlling the file size here][tailwind file-size]. To remove unused CSS styles, simply run `yarn pipeline`.
 
 By the way: [Alpine.js] is excellent in combination with [Tailwind CSS].
 
