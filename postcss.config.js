@@ -1,9 +1,7 @@
 module.exports = ({ options }) => ({
     plugins: {
-        "postcss-import-alias": options.cssAlias,
-        "postcss-easy-import": {
-            extensions: options.extensions,
-        },
+        "postcss-import-alias": options.importAlias,
+        "postcss-easy-import": options.easyImport,
         tailwindcss: true,
         "postcss-nested": true,
         "postcss-assets": {

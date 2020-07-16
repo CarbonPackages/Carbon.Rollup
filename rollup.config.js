@@ -165,8 +165,11 @@ async function config() {
                         use: ["sass", "stylus", "less"],
                         config: {
                             ctx: {
-                                cssAlias,
-                                extensions: extensions.css,
+                                importAlias: cssAlias,
+                                easyImport: {
+                                    extensions: extensions.css,
+                                    prefix: "_",
+                                },
                                 production: isProduction,
                                 banner: extractCSS ? banner : null,
                             },
