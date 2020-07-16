@@ -116,7 +116,6 @@ async function config() {
             const targetFolder = extractCSS ? "Styles" : "Scripts";
             const banner = `${filename} from ${packageName}`;
             const licenseBanner = `For license information please see ${licenseFilename}`;
-            const watchFiles = extractCSS ? watchExtensions.css : watchExtensions.js;
 
             const isTypescript = fileExtension.match(/m?tsx?/);
             // Import babel / typescript only if needed
@@ -131,7 +130,7 @@ async function config() {
             return {
                 input: `${folder(packageName, "private")}/${inputFolder}/${filename}`,
                 watch: {
-                    exclude: "node_modules/**",
+                    include: "DistributionPackages/**",
                 },
                 onwarn: (warning, warn) => {
                     if (warning.code === "FILE_NAME_CONFLICT" && extractCSS) {
