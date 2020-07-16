@@ -30,6 +30,8 @@ module.exports = ({ options }) => ({
             alphaDecimals: 5,
             colorMode: "lrgb",
         },
+        "postcss-for": true,
+        "postcss-each": true,
         "postcss-hexrgba": true,
         "postcss-clip-path-polyfill": true,
         "postcss-responsive-type": true,
