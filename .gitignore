@@ -1,26 +1,4 @@
+# This gitignore file is not for your Neos project, this is only for the Carbon.Rollup repo.
+# If you have cloned the repository with the template feature, please replace this with you own content
 node_modules
-
-__IGNORE__*
-._*
-*.example
-.thumbs
-.idea
-.DS_Store
-.sass-cache
-.vscode
-
-/*.txt
-/*.rst
-/flow
-/flow.bat
-
-/bin
-/Build
-/Configuration
-/Data
-/Packages
-/_Resources
-
-/Web/_Resources
-/Web/index.php
-/Web/robots.txt
+yarn.lock
