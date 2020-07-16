@@ -9,24 +9,33 @@ import postcss from "rollup-plugin-postcss";
 import notify from "rollup-plugin-notify";
 import packages from "./rollup.packages.js";
 
+const targetFolder = {
+    inline: "Private/Templates/InlineAssets",
+    css: "Styles",
+    js: "Scripts",
+};
+
+const targetFileextension = {
+    css: "css",
+    js: "js",
+};
+
+const aliasFolders = ["DistributionPackages", "Packages"];
+
+const extensions = {
+    css: [".pcss", ".scss", ".sass", ".less", ".styl", ".css"],
+    js: [".js", ".jsx", ".vue", ".json"],
+    ts: [".ts", ".tsx", ".mts", ".mtsx"],
+    module: [".mjs", ".mjsx", ".mts", ".mtsx", ".mvue"],
+};
+
 const isProduction = process.env.production;
 if (isProduction) {
     process.env.NODE_ENV = "production";
 }
 
-const aliasFolders = ["DistributionPackages", "Packages"];
-const extensions = {
-    css: [".pcss", ".scss", ".sass", ".less", ".styl", ".css"],
-    js: [".js", ".jsx", ".mjs", ".mjsx", ".ts", ".tsx", ".mts", ".mtsx", ".vue", ".mvue", ".json"],
-};
-
-const watchExtensions = {};
-for (const key in extensions) {
-    watchExtensions[key] = "{" + extensions[key].join(",").replace(/\./g, "") + "}";
-}
-
 const defaultAliasResolver = resolve({
-    extensions: [...extensions.js, ...extensions.css],
+    extensions: [...extensions.js, ...extensions.ts, ...extensions.module, ...extensions.css],
 });
 
 const defaultAliasEntries = aliasFolders.map((folder) => {
@@ -43,6 +52,18 @@ const cssAlias = (() => {
     });
     return alias;
 })();
+
+function folder(packageName, folder = "private") {
+    const base = path.join("DistributionPackages", packageName, "Resources");
+    if (folder === "inline") {
+        return path.join(base, targetFolder.inline);
+    }
+    return path.join(base, folder.charAt(0).toUpperCase() + folder.slice(1));
+}
+
+function checkFileextension(type, filename) {
+    return extensions[type].some((suffix) => filename.endsWith(suffix));
+}
 
 let files = [];
 packages.forEach(
@@ -95,37 +116,26 @@ packages.forEach(
     }
 );
 
-function folder(packageName, folder = "private") {
-    const base = path.join("DistributionPackages", packageName, "Resources");
-    if (folder === "inline") {
-        return path.join(base, "Private/Templates/InlineAssets");
-    }
-    return path.join(base, folder.charAt(0).toUpperCase() + folder.slice(1));
-}
-
 async function config() {
     const terser = isProduction && (await import("rollup-plugin-terser"));
     return Promise.all(
         files.map(async ({ packageName, filename, inputFolder, inline, sourcemap, format, customAlias }) => {
-            const lastIndexOfDot = filename.lastIndexOf(".");
-            const baseFilename = filename.substring(0, lastIndexOfDot);
-            const fileExtension = filename.substring(lastIndexOfDot + 1);
+            const baseFilename = filename.substring(0, filename.lastIndexOf("."));
+            const isTypescript = checkFileextension("ts", filename);
+            const isCSS = checkFileextension("css", filename);
+            const type = isCSS ? "css" : "js";
             const licenseFilename = `${filename}.license`;
-            const extractCSS = (() => extensions.css.some((suffix) => filename.endsWith(suffix)))();
-            const targetFileextension = extractCSS ? "css" : "js";
-            const targetFolder = extractCSS ? "Styles" : "Scripts";
             const banner = `${filename} from ${packageName}`;
             const licenseBanner = `For license information please see ${licenseFilename}`;
 
-            const isTypescript = fileExtension.match(/m?tsx?/);
             // Import babel / typescript only if needed
-            const parser = extractCSS
+            const parser = isCSS
                 ? null
                 : await import(isTypescript ? "@wessberg/rollup-plugin-ts" : "@rollup/plugin-babel");
 
             const outputFilename = inline
-                ? `${folder(packageName, "inline")}/${baseFilename}.${targetFileextension}`
-                : `${folder(packageName, "public")}/${targetFolder}/${baseFilename}.${targetFileextension}`;
+                ? `${folder(packageName, "inline")}/${baseFilename}.${targetFileextension[type]}`
+                : `${folder(packageName, "public")}/${targetFolder[type]}/${baseFilename}.${targetFileextension[type]}`;
 
             return {
                 input: `${folder(packageName, "private")}/${inputFolder}/${filename}`,
@@ -133,7 +143,7 @@ async function config() {
                     include: "DistributionPackages/**",
                 },
                 onwarn: (warning, warn) => {
-                    if (warning.code === "FILE_NAME_CONFLICT" && extractCSS) {
+                    if (warning.code === "FILE_NAME_CONFLICT" && isCSS) {
                         return;
                     }
                     warn(warning);
@@ -148,7 +158,7 @@ async function config() {
                         preferBuiltins: false,
                     }),
                     commonjs({ include: "node_modules/**" }),
-                    extractCSS
+                    isCSS
                         ? null
                         : parser.default(
                               isTypescript
@@ -160,7 +170,7 @@ async function config() {
                           ),
                     json(),
                     postcss({
-                        extract: extractCSS,
+                        extract: isCSS,
                         extensions: extensions.css,
                         use: ["sass", "stylus", "less"],
                         config: {
@@ -171,10 +181,10 @@ async function config() {
                                     prefix: "_",
                                 },
                                 production: isProduction,
-                                banner: extractCSS ? banner : null,
+                                banner: isCSS ? banner : null,
                             },
                         },
-                        sourceMap: extractCSS ? sourcemap : false,
+                        sourceMap: isCSS ? sourcemap : false,
                     }),
                     terser
                         ? terser.terser({
@@ -198,7 +208,7 @@ async function config() {
                               },
                               thirdParty: {
                                   output: {
-                                      file: `${folder(packageName, "public")}/${targetFolder}/${licenseFilename}`,
+                                      file: `${folder(packageName, "public")}/${targetFolder[type]}/${licenseFilename}`,
                                   },
                               },
                           }),
@@ -208,7 +218,7 @@ async function config() {
                     sourcemap: sourcemap,
                     file: outputFilename,
                     format: format,
-                    name: `${packageName}.${baseFilename}.${targetFileextension}`,
+                    name: `${packageName}.${baseFilename}.${targetFileextension[type]}`,
                 },
             };
         })
