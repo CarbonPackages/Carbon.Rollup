@@ -1,7 +1,10 @@
 {
   "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "env": {
-    "es8": true,
+    "browser": true,
     "node": true
   }
 }
