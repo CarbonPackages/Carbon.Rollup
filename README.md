@@ -52,6 +52,37 @@ There are three predefined tasks:
 
 This template comes with a variety of PostCSS Plugins. Feel free to remove some or add your own favorites packages. The configuration is located in [`postcss.config.js`]. The suffix of these files should be `.pcss`.
 
+#### PostCSS Plugins
+
+Following plugins are included:
+
+| Name                         | Description                                                                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [postcss-import-alias]       | Use aliases in your PostCSS import statements                                                                                 |
+| [postcss-easy-import]        | Resolving files with globs                                                                                                    |
+| [Tailwind CSS]               | A utility-first CSS framework for rapidly building custom user interfaces                                                     |
+| [postcss-nested]             | Unwrap nested rules like how Sass does it                                                                                     |
+| [postcss-assets]             | Plugin to manage assets                                                                                                       |
+| [postcss-url]                | Used for rebaseing the url from [postcss-assets]                                                                              |
+| [postcss-normalize]          | Lets you use the parts of normalize.css or sanitize.css that you need from your browserslist                                  |
+| [postcss-preset-env]         | Preset Env lets you convert modern CSS into something most browsers can understand                                            |
+| [postcss-easing-gradients]   | Create smooth linear-gradients that approximate easing functions. [Visual examples][easing-gradients]                         |
+| [postcss-for]                | Enables `@for` loop syntax in your CSS                                                                                        |
+| [postcss-each]               | Plugin to iterate through values with `@each`                                                                                 |
+| [postcss-hexrgba]            | Adds shorthand hex methods to `rgba()` values                                                                                 |
+| [postcss-clip-path-polyfill] | Add SVG hack for clip-path property to make it work in Firefox. Currently supports only `polygon()`                           |
+| [postcss-responsive-type]    | Plugin for automagical responsive typography. Adds a `responsive` property to `font-size`, `line-height` and `letter-spacing` |
+| [postcss-easings]            | Replace easing name from [easings.net] to cubic-bezier()                                                                      |
+| [pleeease-filters]           | Convert CSS shorthand filters to SVG equivalent                                                                               |
+| [postcss-quantity-queries]   | Enabling quantity-queries                                                                                                     |
+| [postcss-momentum-scrolling] | Adding momentum style scrolling behavior for elements with overflow on iOS                                                    |
+| [postcss-round-subpixels]    | Rounds sub-pixel (eg: `12.87378378364px`) values to the nearest full pixel                                                    |
+| [postcss-sort-media-queries] | Combine and sort CSS media queries                                                                                            |
+| [autoprefixer]               | Parse CSS and add vendor prefixes to CSS rules using values from [Can I Use]                                                  |
+| [cssnano]                    | Modern CSS compression                                                                                                        |
+| [postcss-banner]             | Add text banner and footer to resulting file                                                                                  |
+| [postcss-reporter]           | `console.log()` the messages (warnings, etc.) registered by other PostCSS plugins                                             |
+
 ### Usage of CSS Pre-Processors
 
 If you want to use [Sass, Scss][sass], [Less], or [stylus], you have to add to the corresponding package to your setup.
@@ -142,3 +173,29 @@ yarn remove @rollup/plugin-babel
 [`tailwind.config.js`]: tailwind.config.js
 [tailwind file-size]: https://tailwindcss.com/docs/controlling-file-size
 [`.gitignore`]: .gitignore
+[postcss-import-alias]: https://www.npmjs.com/package/postcss-import-alias
+[postcss-easy-import]: https://www.npmjs.com/package/postcss-easy-import
+[postcss-nested]: https://www.npmjs.com/package/postcss-nested
+[postcss-assets]: https://www.npmjs.com/package/postcss-assets
+[postcss-url]: https://www.npmjs.com/package/postcss-url
+[postcss-normalize]: https://www.npmjs.com/package/postcss-normalize
+[postcss-preset-env]: https://preset-env.cssdb.org
+[postcss-easing-gradients]: https://www.npmjs.com/package/postcss-easing-gradients
+[easing-gradients]: https://larsenwork.com/easing-gradients
+[postcss-for]: https://www.npmjs.com/package/postcss-for
+[postcss-each]: https://www.npmjs.com/package/postcss-each
+[postcss-hexrgba]: https://www.npmjs.com/package/postcss-hexrgba
+[postcss-clip-path-polyfill]: https://www.npmjs.com/package/postcss-clip-path-polyfill
+[postcss-responsive-type]: https://www.npmjs.com/package/postcss-responsive-type
+[postcss-easings]: https://www.npmjs.com/package/postcss-easings
+[easings.net]: https://easings.net
+[pleeease-filters]: https://www.npmjs.com/package/pleeease-filters
+[postcss-quantity-queries]: https://www.npmjs.com/package/postcss-quantity-queries
+[postcss-momentum-scrolling]: https://www.npmjs.com/package/postcss-momentum-scrolling
+[postcss-round-subpixels]: https://www.npmjs.com/package/postcss-round-subpixels
+[postcss-sort-media-queries]: https://www.npmjs.com/package/postcss-sort-media-queries
+[autoprefixer]: https://www.npmjs.com/package/autoprefixer
+[can i use]: https://caniuse.com
+[cssnano]: https://cssnano.co
+[postcss-banner]: https://www.npmjs.com/package/postcss-banner
+[postcss-reporter]: https://www.npmjs.com/package/postcss-reporter
