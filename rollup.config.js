@@ -36,16 +36,12 @@ const defaultAliasEntries = aliasFolders.map((folder) => {
     };
 });
 
-const cssAliasResolverOptions = (() => {
+const cssAlias = (() => {
     const alias = {};
     aliasFolders.forEach((folder) => {
         alias[folder] = path.resolve(__dirname, folder);
     });
-    return {
-        alias,
-        extensions: extensions.css,
-        dontPrefix: true,
-    };
+    return alias;
 })();
 
 let files = [];
@@ -166,11 +162,11 @@ async function config() {
                     json(),
                     postcss({
                         extract: extractCSS,
-                        extensions: [".pcss", ".scss", ".less", ".styl"],
+                        extensions: extensions.css,
                         use: ["sass", "stylus", "less"],
                         config: {
                             ctx: {
-                                resolver: cssAliasResolverOptions,
+                                cssAlias,
                                 production: isProduction,
                                 banner: extractCSS ? banner : null,
                             },
