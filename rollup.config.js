@@ -13,11 +13,13 @@ const targetFolder = {
     inline: "Private/Templates/InlineAssets",
     css: "Styles",
     js: "Scripts",
+    module: "Modules",
 };
 
 const targetFileextension = {
     css: "css",
     js: "js",
+    module: "mjs",
 };
 
 const aliasFolders = ["DistributionPackages", "Packages"];
@@ -121,12 +123,17 @@ async function config() {
     return Promise.all(
         files.map(async ({ packageName, filename, inputFolder, inline, sourcemap, format, customAlias }) => {
             const baseFilename = filename.substring(0, filename.lastIndexOf("."));
+            const isModule = checkFileextension("module", filename);
             const isTypescript = checkFileextension("ts", filename);
             const isCSS = checkFileextension("css", filename);
-            const type = isCSS ? "css" : "js";
+            const type = isCSS ? "css" : isModule ? "module" : "js";
             const licenseFilename = `${filename}.license`;
             const banner = `${filename} from ${packageName}`;
             const licenseBanner = `For license information please see ${licenseFilename}`;
+
+            if (isModule) {
+                format = "es";
+            }
 
             // Import babel / typescript only if needed
             const parser = isCSS
