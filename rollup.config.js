@@ -167,6 +167,7 @@ async function config() {
                         config: {
                             ctx: {
                                 cssAlias,
+                                extensions: extensions.css,
                                 production: isProduction,
                                 banner: extractCSS ? banner : null,
                             },
