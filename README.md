@@ -6,6 +6,18 @@
 
 This repository is meant to use as a template for your project. Download the files and copy them into your [Neos CMS] mono repository. After that, you've got the freedom to adjust the configuration (edit/remove/add) to your specific needs.
 
+## Getting started
+
+To use this build stack, you can either [download the code as zip file][master.zip] or generate a new repository and [use this as a template][generate]. If you use the template function, please be aware, that you have to edit/replace/remove following files or folders:
+
+- `.github`
+- `.gitattributes`
+- [`.gitignore`]
+- `CODE_OF_CONDUCT.md`
+- `README.md`
+
+For example, in this repository, `yarn.lock` is excluded, but in a project, `yarn.lock` should be included.
+
 ## Add files to the build stack
 
 The entry files of your Neos repository is configured in [`rollup.packages.js`]. The entries are set up in an array, and a single entry is an object with following options:
@@ -23,15 +35,16 @@ The entry files of your Neos repository is configured in [`rollup.packages.js`].
 - Inline files will be written to `Resources/Private/Templates/InlineAssets`.
 - If you want to inject the styles via JavaScript, you can import your styles directly into your JS file (e.g. `import ./Component/Header.pcss`)
 
-## Yarn Task
+## Yarn tasks
 
 There are three predefined tasks:
 
-| Scripts         | Description                              | Optimze file size | Command                                                 |
-| --------------- | ---------------------------------------- | :---------------: | ------------------------------------------------------- |
-| `yarn start`    | Start the file watcher                   |                   | `rollup --config --watch`                               |
-| `yarn build`    | Build the files once                     |                   | `rollup --config`                                       |
-| `yarn pipeline` | Run install, build and optimze file size |         ✓         | `yarn install;rollup --config --environment production` |
+| Scripts         | Description                               | Optimize file size | Command                                                 |
+| --------------- | ----------------------------------------- | :----------------: | ------------------------------------------------------- |
+| `yarn start`    | Start the file watcher                    |                    | `rollup --config --watch`                               |
+| `yarn build`    | Build the files once                      |                    | `rollup --config`                                       |
+| `yarn pipeline` | Run install, build and optimize file size |         ✓          | `yarn install;rollup --config --environment production` |
+
 
 ## CSS
 
@@ -128,3 +141,4 @@ yarn remove @rollup/plugin-babel
 [alpine.js]: https://github.com/alpinejs/alpine
 [`tailwind.config.js`]: tailwind.config.js
 [tailwind file-size]: https://tailwindcss.com/docs/controlling-file-size
+[`.gitignore`]: .gitignore
