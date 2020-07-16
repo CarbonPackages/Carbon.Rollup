@@ -91,7 +91,7 @@ If you want to use [Sass, Scss][sass], [Less], or [stylus], you have to add to t
 - For [Less] enter `yarn add --dev less`
 - For [stylus] enter `yarn add --dev stylus`
 
-> Note: If you want to use [stylus], you have to set [.nvmrc] to `13`, as there is a bug with node 14
+> Note: If you want to use [stylus], you have to set [.nvmrc] to `12`, as there is a bug with node 14
 
 ### Tailwind CSS
 
