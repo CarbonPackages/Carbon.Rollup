@@ -26,9 +26,10 @@ const aliasFolders = ["DistributionPackages", "Packages"];
 
 const extensions = {
     css: [".pcss", ".scss", ".sass", ".less", ".styl", ".css"],
-    js: [".js", ".jsx", ".json"],
+    js: [".js", ".jsx", ".vue", ".json"],
     ts: [".ts", ".tsx", ".mts", ".mtsx"],
-    module: [".mjs", ".mjsx", ".mts", ".mtsx"],
+    vue: [".vue", ".mvue"],
+    module: [".mjs", ".mjsx", ".mts", ".mtsx", ".mvue"],
 };
 
 const isProduction = process.env.production;
@@ -126,6 +127,7 @@ async function config() {
             const isModule = checkFileextension("module", filename);
             const isTypescript = checkFileextension("ts", filename);
             const isCSS = checkFileextension("css", filename);
+            const isVue = checkFileextension("vue", filename);
             const type = isCSS ? "css" : isModule ? "module" : "js";
             const licenseFilename = `${filename}.license`;
             const banner = `${filename} from ${packageName}`;
@@ -134,6 +136,8 @@ async function config() {
             if (isModule) {
                 format = "es";
             }
+
+            const vuePlugin = isVue ? await import("rollup-plugin-vue") : null;
 
             // Import babel / typescript only if needed
             const parser = isCSS
@@ -159,6 +163,11 @@ async function config() {
                     beep(),
                     notify(),
                     alias(customAlias),
+                    isVue
+                        ? vuePlugin.default({
+                              include: [/\.m?vue$/i],
+                          })
+                        : null,
                     resolve({
                         module: true,
                         jsnext: true,

@@ -102,6 +102,14 @@ By the way: [Alpine.js] is excellent in combination with [Tailwind CSS].
 
 ## Javascript
 
+### Usage of Vue
+
+If you want to use [Vue.js], add following packages to `package.json`:
+
+```bash
+yarn add --dev rollup-plugin-vue
+```
+
 ### Usage of TypeScript
 
 If you want TypeScript, add following packages to `package.json`:
@@ -200,3 +208,4 @@ yarn remove @rollup/plugin-babel
 [cssnano]: https://cssnano.co
 [postcss-banner]: https://www.npmjs.com/package/postcss-banner
 [postcss-reporter]: https://www.npmjs.com/package/postcss-reporter
+[vue.js]: https://vuejs.org/
