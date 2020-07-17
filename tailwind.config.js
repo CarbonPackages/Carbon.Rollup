@@ -4,6 +4,10 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
     theme: {
         extend: {
+            screens: {
+                light: { raw: "(prefers-color-scheme: light)" },
+                dark: { raw: "(prefers-color-scheme: dark)" },
+            },
             maxWidth: (theme) => ({
                 "screen-md-p": `calc(${theme("screens.md")} + ${theme("spacing.8")})`,
             }),
