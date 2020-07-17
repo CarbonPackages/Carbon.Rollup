@@ -104,7 +104,7 @@ By the way: [Alpine.js] is excellent in combination with [Tailwind CSS].
 
 ### Usage of TypeScript
 
-If you want TypeScript, add following packages to `package.json`:
+If you want to use [TypeScript], add following packages to `package.json`:
 
 ```bash
 yarn add --dev typescript @typescript-eslint/eslint-plugin @babel/preset-typescript @typescript-eslint/parser @wessberg/rollup-plugin-ts
@@ -200,3 +200,4 @@ yarn remove @rollup/plugin-babel
 [cssnano]: https://cssnano.co
 [postcss-banner]: https://www.npmjs.com/package/postcss-banner
 [postcss-reporter]: https://www.npmjs.com/package/postcss-reporter
+[typescript]: https://www.typescriptlang.org
