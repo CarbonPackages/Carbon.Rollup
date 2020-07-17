@@ -34,7 +34,7 @@ The entry files of your Neos repository is configured in [`rollup.packages.js`].
 
 - Inline files will be written to `Resources/Private/Templates/InlineAssets`.
 - If you want to inject the styles via JavaScript, you can import your styles directly into your JS file (e.g. `import ./Component/Header.pcss`)
-- If you set an entry file with the javascript module suffix (`.mjs`, `.mjsx`, `.mts`, `.mtsx` or `.mvue`) the format of this file will enforced to `es`. E.g. if you have following array `["Main.js", "Module.mjs"]`, and have no specific setting for format, `Main.js` will have the format `iife` and `Module.mjs` will have the format `es`.
+- If you set an entry file with the javascript module suffix (`.mjs`, `.mjsx`, `.mts` or `.mtsx`) the format of this file will enforced to `es`. E.g. if you have the following array `["Main.js", "Module.mjs"]`, and have no specific setting for the format, `Main.js` will have the format `iife` and `Module.mjs` will have the format `es`.
 
 ## Yarn tasks
 
