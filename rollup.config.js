@@ -26,9 +26,9 @@ const aliasFolders = ["DistributionPackages", "Packages"];
 
 const extensions = {
     css: [".pcss", ".scss", ".sass", ".less", ".styl", ".css"],
-    js: [".js", ".jsx", ".vue", ".json"],
+    js: [".js", ".jsx", ".json"],
     ts: [".ts", ".tsx", ".mts", ".mtsx"],
-    module: [".mjs", ".mjsx", ".mts", ".mtsx", ".mvue"],
+    module: [".mjs", ".mjsx", ".mts", ".mtsx"],
 };
 
 const isProduction = process.env.production;
