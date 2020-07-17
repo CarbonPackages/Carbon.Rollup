@@ -46,6 +46,21 @@ There are three predefined tasks:
 | `yarn build`    | Build the files once                      |                    | `rollup --config`                                       |
 | `yarn pipeline` | Run install, build and optimize file size |         ✓          | `yarn install;rollup --config --environment production` |
 
+## Import files from DistributionPackages and other Packages
+
+By default, two aliases are predefined: `DistributionPackages` and `Packages`. Like that you can import (CSS and JS) files from other packages like that:
+
+```js
+import "DistributionPackages/Vendor.Foo/Resources/Private/Fusion/Main";
+import "Packages/Plugins/Jonnitto.PhotoSwipe/Resources/Private/Assets/PhotoSwipe";
+```
+
+```css
+@import "DistributionPackages/Vendor.Foo/Resources/Private/Fusion/Main.pcss";
+@import "Packages/Plugins/Jonnitto.PhotoSwipe/Resources/Private/Assets/Dark.scss";
+```
+
+Thanks to [postcss-easy-import], you can also use globbing in CSS imports: `@import "Presentation/**/*.pcss";`
 
 ## CSS
 
