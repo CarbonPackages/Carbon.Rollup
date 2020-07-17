@@ -11,9 +11,9 @@ import packages from "./rollup.packages.js";
 
 const targetFolder = {
     inline: "Private/Templates/InlineAssets",
-    css: "Styles",
-    js: "Scripts",
-    module: "Modules",
+    css: "Public/Styles",
+    js: "Public/Scripts",
+    module: "Public/Modules",
 };
 
 const targetFileextension = {
@@ -55,12 +55,9 @@ const cssAlias = (() => {
     return alias;
 })();
 
-function folder(packageName, folder = "private") {
+function folder(packageName, type) {
     const base = path.join("DistributionPackages", packageName, "Resources");
-    if (folder === "inline") {
-        return path.join(base, targetFolder.inline);
-    }
-    return path.join(base, folder.charAt(0).toUpperCase() + folder.slice(1));
+    return type ? path.join(base, targetFolder[type]) : base;
 }
 
 function checkFileextension(type, filename) {
@@ -140,12 +137,13 @@ async function config() {
                 ? null
                 : await import(isTypescript ? "@wessberg/rollup-plugin-ts" : "@rollup/plugin-babel");
 
-            const outputFilename = inline
-                ? `${folder(packageName, "inline")}/${baseFilename}.${targetFileextension[type]}`
-                : `${folder(packageName, "public")}/${targetFolder[type]}/${baseFilename}.${targetFileextension[type]}`;
+            const outputFilename = path.join(
+                folder(packageName, inline ? "inline" : type),
+                `${baseFilename}.${targetFileextension[type]}`
+            );
 
             return {
-                input: `${folder(packageName, "private")}/${inputFolder}/${filename}`,
+                input: path.join(folder(packageName), "Private", inputFolder, filename),
                 watch: {
                     include: "DistributionPackages/**",
                 },
@@ -215,7 +213,7 @@ async function config() {
                               },
                               thirdParty: {
                                   output: {
-                                      file: `${folder(packageName, "public")}/${targetFolder[type]}/${licenseFilename}`,
+                                      file: path.join(folder(packageName, type), licenseFilename),
                                   },
                               },
                           }),
@@ -225,7 +223,7 @@ async function config() {
                     sourcemap: sourcemap,
                     file: outputFilename,
                     format: format,
-                    name: `${packageName}.${baseFilename}.${targetFileextension[type]}`,
+                    name: `${packageName}.${baseFilename}`,
                 },
             };
         })
