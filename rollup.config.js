@@ -9,6 +9,13 @@ import postcss from "rollup-plugin-postcss";
 import notify from "rollup-plugin-notify";
 import packages from "./rollup.packages.js";
 
+const extensions = {
+    css: [".pcss", ".scss", ".sass", ".less", ".styl", ".css"],
+    js: [".js", ".jsx", ".json"],
+    module: [".mjs", ".mjsx", ".mts", ".mtsx"],
+    ts: [".ts", ".tsx", ".mts", ".mtsx"],
+};
+
 const targetFolder = {
     inline: "Private/Templates/InlineAssets",
     css: "Public/Styles",
@@ -22,14 +29,21 @@ const targetFileextension = {
     module: "mjs",
 };
 
-const aliasFolders = ["DistributionPackages", "Packages"];
-
-const extensions = {
-    css: [".pcss", ".scss", ".sass", ".less", ".styl", ".css"],
-    js: [".js", ".jsx", ".json"],
-    ts: [".ts", ".tsx", ".mts", ".mtsx"],
-    module: [".mjs", ".mjsx", ".mts", ".mtsx"],
+const parser = {
+    javascript: {
+        plugin: "@rollup/plugin-babel",
+        options: {
+            exclude: "node_modules/**", // only transpile our source code
+            babelHelpers: "bundled",
+        },
+    },
+    typescript: {
+        plugin: "@wessberg/rollup-plugin-ts",
+        options: {},
+    },
 };
+
+const aliasFolders = ["DistributionPackages", "Packages"];
 
 const isProduction = process.env.production;
 if (isProduction) {
@@ -127,15 +141,17 @@ async function config() {
             const licenseFilename = `${filename}.license`;
             const banner = `${filename} from ${packageName}`;
             const licenseBanner = `For license information please see ${licenseFilename}`;
+            let jsParser = isCSS ? null : "javascript";
+            if (isTypescript) {
+                jsParser = "typescript";
+            }
 
             if (isModule) {
                 format = "es";
             }
 
-            // Import babel / typescript only if needed
-            const parser = isCSS
-                ? null
-                : await import(isTypescript ? "@wessberg/rollup-plugin-ts" : "@rollup/plugin-babel");
+            // Import parser only if needed
+            const parserPackage = jsParser ? await import(parser[jsParser].plugin) : null;
 
             const outputFilename = path.join(
                 folder(packageName, inline ? "inline" : type),
@@ -163,16 +179,7 @@ async function config() {
                         preferBuiltins: false,
                     }),
                     commonjs({ include: "node_modules/**" }),
-                    isCSS
-                        ? null
-                        : parser.default(
-                              isTypescript
-                                  ? {}
-                                  : {
-                                        exclude: "node_modules/**", // only transpile our source code
-                                        babelHelpers: "bundled",
-                                    }
-                          ),
+                    jsParser ? parserPackage.default(parser[jsParser].options) : null,
                     json(),
                     postcss({
                         extract: isCSS,
