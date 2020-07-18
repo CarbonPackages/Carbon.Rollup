@@ -70,7 +70,8 @@ This template comes with a variety of PostCSS Plugins. Feel free to remove some 
 
 #### PostCSS Plugins
 
-Following plugins are included:
+<details>
+<summary><strong>Following plugins are included:</strong></summary>
 
 | Name                         | Description                                                                                                                   |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -99,6 +100,8 @@ Following plugins are included:
 | [postcss-banner]             | Add text banner and footer to resulting file                                                                                  |
 | [postcss-reporter]           | `console.log()` the messages (warnings, etc.) registered by other PostCSS plugins                                             |
 
+</details>
+
 ### Usage of CSS Pre-Processors
 
 If you want to use [Sass, Scss][sass], [Less], or [stylus], you have to add to the corresponding package to your setup.
@@ -117,7 +120,8 @@ By the way: [Alpine.js] is excellent in combination with [Tailwind CSS].
 
 ## Javascript
 
-### Usage of TypeScript
+<details>
+<summary><strong>Usage of TypeScript</strong></summary>
 
 If you want to use [TypeScript], add following packages to `package.json`:
 
@@ -152,6 +156,8 @@ If you don't use Javascript at all, you can remove `@rollup/plugin-babel` with t
 ```bash
 yarn remove @rollup/plugin-babel
 ```
+
+</details>
 
 [preview]: https://repository-images.githubusercontent.com/276846965/b977e000-c6db-11ea-9cd8-18040e6a19d8
 [david]: https://img.shields.io/david/dev/CarbonPackages/Carbon.Rollup
