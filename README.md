@@ -159,6 +159,49 @@ yarn remove @rollup/plugin-babel
 
 </details>
 
+<details>
+<summary><strong>Usage of Svelte</strong></summary>
+
+If you want to use [Svelte], add the following packages to `package.json`:
+
+```bash
+yarn add --dev svelte svelte-preprocess rollup-plugin-svelte eslint-plugin-svelte3
+```
+
+**Fileextensions**
+
+To let Rollup know when to use the svelte parser, use one of the following fileextensions as entry point:
+
+- `.sjs` For your Javascript file where you set up the app
+- `.msjs` For your Javascript file where you set up the app and want to have it exported as module
+- `.svelte` A default Svelte file
+
+To enable the correct linting, edit [`.eslintrc`]:
+
+```json
+{
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "plugins": ["svelte3"],
+  "overrides": [
+    {
+      "files": ["*.svelte"],
+      "processor": "svelte3/svelte3"
+    }
+  ]
+}
+```
+
+</details>
+
 [preview]: https://repository-images.githubusercontent.com/276846965/b977e000-c6db-11ea-9cd8-18040e6a19d8
 [david]: https://img.shields.io/david/dev/CarbonPackages/Carbon.Rollup
 [david-dm]: https://david-dm.org/CarbonPackages/Carbon.Rollup?type=dev
@@ -222,3 +265,4 @@ yarn remove @rollup/plugin-babel
 [postcss-banner]: https://www.npmjs.com/package/postcss-banner
 [postcss-reporter]: https://www.npmjs.com/package/postcss-reporter
 [typescript]: https://www.typescriptlang.org
+[svelte]: https://svelte.dev
