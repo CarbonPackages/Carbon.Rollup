@@ -29,6 +29,8 @@ const targetFileextension = {
     module: "mjs",
 };
 
+const dynamicImports = {};
+
 // You can pass multiple parser to one type
 const parser = {
     javascript: [
@@ -158,20 +160,29 @@ async function asyncForEach(array, callback) {
 }
 
 async function config() {
-    const dynamicImports = {};
     if (isProduction) {
         const { terser } = isProduction && (await import("rollup-plugin-terser"));
         dynamicImports.terser = terser;
     }
 
-    // // Pre-import parser
+    // Pre-import parser
     await asyncForEach(neededParser, async (entry) => {
         await asyncForEach(parser[entry], async (item) => {
             const name = item.plugin;
             if (dynamicImports[name]) {
                 return;
             }
-            dynamicImports[name] = await import(name);
+            const imp = await import(name);
+            dynamicImports[name] = imp.default;
+            if (item.additionalPlugins?.length) {
+                await asyncForEach(item.additionalPlugins, async (additonalPlugin) => {
+                    if (dynamicImports[additonalPlugin]) {
+                        return;
+                    }
+                    const imp = await import(additonalPlugin);
+                    dynamicImports[additonalPlugin] = imp.default;
+                });
+            }
         });
     });
 
@@ -214,7 +225,13 @@ async function config() {
                         preferBuiltins: false,
                     }),
                     commonjs({ include: "node_modules/**" }),
-                    ...parserPackages.map((entry) => dynamicImports[entry.plugin].default(entry.options)),
+                    ...parserPackages.map((entry) =>
+                        dynamicImports[entry.plugin](
+                            typeof entry.options === "function"
+                                ? entry.options({ packageName, filename, sourcemap, format })
+                                : entry.options
+                        )
+                    ),
                     json(),
                     postcss({
                         extract: isCSS,
