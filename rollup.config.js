@@ -29,18 +29,23 @@ const targetFileextension = {
     module: "mjs",
 };
 
+// You can pass multiple parser to one type
 const parser = {
-    javascript: {
-        plugin: "@rollup/plugin-babel",
-        options: {
-            exclude: "node_modules/**", // only transpile our source code
-            babelHelpers: "bundled",
+    javascript: [
+        {
+            plugin: "@rollup/plugin-babel",
+            options: {
+                exclude: "node_modules/**", // only transpile our source code
+                babelHelpers: "bundled",
+            },
         },
-    },
-    typescript: {
-        plugin: "@wessberg/rollup-plugin-ts",
-        options: {},
-    },
+    ],
+    typescript: [
+        {
+            plugin: "@wessberg/rollup-plugin-ts",
+            options: {},
+        },
+    ],
 };
 
 const aliasFolders = ["DistributionPackages", "Packages"];
@@ -79,6 +84,7 @@ function checkFileextension(type, filename) {
 }
 
 let files = [];
+let neededParser = [];
 packages.forEach(
     ({
         packageName,
@@ -116,6 +122,20 @@ packages.forEach(
         }
 
         filenames.forEach((filename) => {
+            const isModule = checkFileextension("module", filename);
+            const isCSS = checkFileextension("css", filename);
+            const targetType = isCSS ? "css" : isModule ? "module" : "js";
+            let parserType = null;
+            if (checkFileextension("js", filename)) {
+                parserType = "javascript";
+            } else if (checkFileextension("ts", filename)) {
+                parserType = "typescript";
+            }
+
+            if (parserType && !neededParser.includes(parserType)) {
+                neededParser.push(parserType);
+            }
+
             files.push({
                 packageName,
                 filename,
@@ -124,38 +144,53 @@ packages.forEach(
                 sourcemap,
                 format,
                 customAlias,
+                parserType,
+                targetType,
             });
         });
     }
 );
 
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
+}
+
 async function config() {
-    const terser = isProduction && (await import("rollup-plugin-terser"));
-    return Promise.all(
-        files.map(async ({ packageName, filename, inputFolder, inline, sourcemap, format, customAlias }) => {
+    const dynamicImports = {};
+    if (isProduction) {
+        const { terser } = isProduction && (await import("rollup-plugin-terser"));
+        dynamicImports.terser = terser;
+    }
+
+    // // Pre-import parser
+    await asyncForEach(neededParser, async (entry) => {
+        await asyncForEach(parser[entry], async (item) => {
+            const name = item.plugin;
+            if (dynamicImports[name]) {
+                return;
+            }
+            dynamicImports[name] = await import(name);
+        });
+    });
+
+    return files.map(
+        ({ packageName, filename, inputFolder, inline, sourcemap, format, customAlias, parserType, targetType }) => {
             const baseFilename = filename.substring(0, filename.lastIndexOf("."));
-            const isModule = checkFileextension("module", filename);
-            const isTypescript = checkFileextension("ts", filename);
-            const isCSS = checkFileextension("css", filename);
-            const type = isCSS ? "css" : isModule ? "module" : "js";
+            const isCSS = targetType === "css";
             const licenseFilename = `${filename}.license`;
             const banner = `${filename} from ${packageName}`;
             const licenseBanner = `For license information please see ${licenseFilename}`;
-            let jsParser = isCSS ? null : "javascript";
-            if (isTypescript) {
-                jsParser = "typescript";
-            }
+            const parserPackages = parserType ? parser[parserType] : [];
 
-            if (isModule) {
+            if (targetType === "module") {
                 format = "es";
             }
 
-            // Import parser only if needed
-            const parserPackage = jsParser ? await import(parser[jsParser].plugin) : null;
-
             const outputFilename = path.join(
-                folder(packageName, inline ? "inline" : type),
-                `${baseFilename}.${targetFileextension[type]}`
+                folder(packageName, inline ? "inline" : targetType),
+                `${baseFilename}.${targetFileextension[targetType]}`
             );
 
             return {
@@ -179,7 +214,7 @@ async function config() {
                         preferBuiltins: false,
                     }),
                     commonjs({ include: "node_modules/**" }),
-                    jsParser ? parserPackage.default(parser[jsParser].options) : null,
+                    ...parserPackages.map((entry) => dynamicImports[entry.plugin].default(entry.options)),
                     json(),
                     postcss({
                         extract: isCSS,
@@ -198,32 +233,30 @@ async function config() {
                         },
                         sourceMap: isCSS ? sourcemap : false,
                     }),
-                    terser
-                        ? terser.terser({
-                              output: {
-                                  comments: false,
-                              },
-                          })
-                        : null,
-                    inline
-                        ? null
-                        : license({
-                              sourcemap: sourcemap,
-                              banner: {
-                                  commentStyle: "none",
-                                  data: {
-                                      banner,
-                                      licenseBanner,
-                                  },
-                                  content: `// <%= data.banner %><% if (dependencies.length) { %>
+                    dynamicImports.terser &&
+                        dynamicImports.terser({
+                            output: {
+                                comments: false,
+                            },
+                        }),
+                    !inline &&
+                        license({
+                            sourcemap: sourcemap,
+                            banner: {
+                                commentStyle: "none",
+                                data: {
+                                    banner,
+                                    licenseBanner,
+                                },
+                                content: `// <%= data.banner %><% if (dependencies.length) { %>
 // <%= data.licenseBanner %><% } %>`,
-                              },
-                              thirdParty: {
-                                  output: {
-                                      file: path.join(folder(packageName, type), licenseFilename),
-                                  },
-                              },
-                          }),
+                            },
+                            thirdParty: {
+                                output: {
+                                    file: path.join(folder(packageName, targetType), licenseFilename),
+                                },
+                            },
+                        }),
                 ].filter((item) => !!item),
                 output: {
                     sourcemapExcludeSources: !isProduction,
@@ -233,7 +266,7 @@ async function config() {
                     name: `${packageName}.${baseFilename}`,
                 },
             };
-        })
+        }
     );
 }
 
