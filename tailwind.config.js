@@ -24,9 +24,28 @@ module.exports = {
             },
         },
     },
-    purge: [
-        "./DistributionPackages/**/*.fusion",
-        "./DistributionPackages/**/*.html",
-        "./Data/Temporary/Development/MonocleViews/**/*.html",
-    ],
+    dark: "media", // or 'class'
+    experimental: {
+        applyComplexClasses: true,
+        uniformColorPalette: true,
+        extendedSpacingScale: true,
+        defaultLineHeights: true,
+        extendedFontSizeScale: true,
+        standardFontWeights: true,
+        // darkModeVariant: true,
+    },
+    future: {
+        removeDeprecatedGapUtilities: true,
+        purgeLayersByDefault: true,
+    },
+    purge: {
+        mode: "layers",
+        layers: ["base", "components", "utilities"],
+        preserveHtmlElements: true,
+        content: [
+            "./DistributionPackages/**/*.fusion",
+            "./DistributionPackages/**/*.html",
+            "./Data/Temporary/Development/MonocleViews/**/*.html",
+        ],
+    },
 };
