@@ -35,7 +35,6 @@
     "postcss-for": "^2.1.1",
     "postcss-hexrgba": "^2.0.0",
     "postcss-import-alias": "^0.0.1",
-    "postcss-loader": "^3.0.0",
     "postcss-momentum-scrolling": "^2.8.20",
     "postcss-nested": "^4.2.3",
     "postcss-normalize": "^9.0.0",
