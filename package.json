@@ -46,7 +46,7 @@
     "postcss-sort-media-queries": "^1.31.21",
     "postcss-url": "^8.0.0",
     "prettier": "^2.1.1",
-    "rollup": "^2.26.10",
+    "rollup": "^2.27.0",
     "rollup-plugin-license": "^2.2.0",
     "rollup-plugin-notify": "^1.1.0",
     "rollup-plugin-postcss": "^3.1.8",
