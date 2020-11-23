@@ -13,9 +13,10 @@
         "ignoreAtRules": [
           "tailwind",
           "apply",
-          "screen",
+          "layer",
+          "variants",
           "responsive",
-          "variants"
+          "screen"
         ]
       }
     ],
@@ -25,9 +26,10 @@
         "ignoreAtRules": [
           "tailwind",
           "apply",
-          "screen",
+          "layer",
+          "variants",
           "responsive",
-          "variants"
+          "screen"
         ]
       }
     ],
