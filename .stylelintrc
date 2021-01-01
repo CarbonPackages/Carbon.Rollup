@@ -16,7 +16,11 @@
           "layer",
           "variants",
           "responsive",
-          "screen"
+          "screen",
+          "include",
+          "if",
+          "else",
+          "mixin"
         ]
       }
     ],
@@ -29,7 +33,11 @@
           "layer",
           "variants",
           "responsive",
-          "screen"
+          "screen",
+          "include",
+          "if",
+          "else",
+          "mixin"
         ]
       }
     ],
