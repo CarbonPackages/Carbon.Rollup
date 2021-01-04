@@ -28,7 +28,7 @@
     "pleeease-filters": "^4.0.0",
     "postcss": "^8.2.1",
     "postcss-assets": "^5.0.0",
-    "postcss-banner": "^3.0.2",
+    "postcss-banner": "^4.0.0",
     "postcss-clip-path-polyfill": "~1.1.0",
     "postcss-each": "^0.10.0",
     "postcss-easing-gradients": "^3.0.1",
