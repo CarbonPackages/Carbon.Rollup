@@ -11,8 +11,9 @@ import packages from "./rollup.packages.js";
 const extensions = {
     css: [".pcss", ".scss", ".sass", ".less", ".styl", ".css"],
     js: [".js", ".jsx", ".json"],
-    module: [".mjs", ".mjsx", ".mts", ".mtsx"],
+    module: [".mjs", ".mjsx", ".mts", ".mtsx", ".msjs"],
     ts: [".ts", ".tsx", ".mts", ".mtsx"],
+    svelte: [".svelte", ".sjs", ".msjs"],
 };
 
 const targetFolder = {
@@ -45,6 +46,45 @@ const parser = {
         {
             plugin: "@wessberg/rollup-plugin-ts",
             options: {},
+        },
+    ],
+    svelte: [
+        {
+            plugin: "rollup-plugin-svelte",
+            additionalPlugins: ["@rollup/plugin-babel", "svelte-preprocess"],
+            options: () => {
+                const preprocess = dynamicImports["svelte-preprocess"];
+                return {
+                    emitCss: true,
+                    preprocess: preprocess({
+                        preserve: ["ld+json"],
+                        babel: {
+                            presets: [
+                                [
+                                    "@babel/preset-env",
+                                    {
+                                        loose: true,
+                                        // No need for babel to resolve modules
+                                        modules: false,
+                                        targets: {
+                                            // ! Very important. Target es6+
+                                            esmodules: true,
+                                        },
+                                    },
+                                ],
+                            ],
+                        },
+                    }),
+                };
+            },
+        },
+        {
+            plugin: "@rollup/plugin-babel",
+            options: {
+                extensions: [".js", ".mjs", ".sjs", ".msjs", ".json", ".html", ".svelte"],
+                exclude: ["node_modules/@babel/**"],
+                babelHelpers: "bundled",
+            },
         },
     ],
 };
@@ -131,6 +171,8 @@ packages.forEach(
                 parserType = "javascript";
             } else if (checkFileextension("ts", filename)) {
                 parserType = "typescript";
+            } else if (checkFileextension("svelte", filename)) {
+                parserType = "svelte";
             }
 
             if (parserType && !neededParser.includes(parserType)) {
