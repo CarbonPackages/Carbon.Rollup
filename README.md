@@ -1,4 +1,8 @@
-![Carbon.Rollup – Build stack for Neos CMS][preview]
+# Carbon.Rollup has a successor: Carbon.Pipeline
+
+[Carbon.Pipeline] is an ultra-fast build stack for Neos CMS based on [esbuild] and [PostCSS], inclusive [Vue.js] and [Svelte] support. And of course [TypeScript], too.
+
+[![Carbon.Pipeline – Build stack for Neos CMS][logo]][Carbon.Pipeline]
 
 [![Download]][master.zip] [![Template]][generate] [![David]][david-dm] [![GitHub stars]][stargazers] [![GitHub watchers]][subscription] [![GitHub license]][license] [![GitHub issues]][issues] [![GitHub forks]][network] [![Twitter]][tweet] [![Sponsor @Jonnitto on GitHub]][sponsor]
 
@@ -159,7 +163,6 @@ yarn remove @rollup/plugin-babel
 
 </details>
 
-[preview]: https://repository-images.githubusercontent.com/276846965/b977e000-c6db-11ea-9cd8-18040e6a19d8
 [david]: https://img.shields.io/david/dev/CarbonPackages/Carbon.Rollup
 [david-dm]: https://david-dm.org/CarbonPackages/Carbon.Rollup?type=dev
 [github issues]: https://img.shields.io/github/issues/CarbonPackages/Carbon.Rollup
@@ -222,3 +225,10 @@ yarn remove @rollup/plugin-babel
 [postcss-banner]: https://www.npmjs.com/package/postcss-banner
 [postcss-reporter]: https://www.npmjs.com/package/postcss-reporter
 [typescript]: https://www.typescriptlang.org
+[carbon.pipeline]: https://github.com/CarbonPackages/Carbon.Pipeline#readme
+[logo]: https://repository-images.githubusercontent.com/377838441/8d66c680-d27d-11eb-99a4-85ab35081318
+[esbuild]: https://esbuild.github.io
+[postcss]: https://postcss.org
+[typescript]: https://www.typescriptlang.org
+[svelte]: https://svelte.dev
+[vue.js]: https://vuejs.org
