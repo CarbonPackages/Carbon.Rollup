@@ -3,7 +3,9 @@ module.exports = ({ options }) => ({
         "postcss-import-alias": options.importAlias,
         "postcss-easy-import": options.easyImport,
         tailwindcss: true,
-        "postcss-nested": true,
+        "postcss-nested": {
+            bubble: ["layer", "variants", "responsive", "screen"],
+        },
         "postcss-assets": {
             cachebuster: false,
             basePath: "DistributionPackages/",

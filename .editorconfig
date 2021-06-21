@@ -13,7 +13,7 @@ indent_style = space
 indent_size = 4
 
 # Exceptions
-[{*.{yaml,yml,sh,jscsrc,},package.json,.*rc}]
+[{*.{yaml,yml,sh,jscsrc},package.json,.*rc}]
 indent_size = 2
 
 # All kind of CSS files

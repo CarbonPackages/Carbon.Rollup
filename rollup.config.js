@@ -6,7 +6,6 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import license from "rollup-plugin-license";
 import postcss from "rollup-plugin-postcss";
-import notify from "rollup-plugin-notify";
 import packages from "./rollup.packages.js";
 
 const extensions = {
@@ -259,7 +258,6 @@ async function config() {
                 },
                 plugins: [
                     beep(),
-                    notify(),
                     alias(customAlias),
                     resolve({
                         module: true,

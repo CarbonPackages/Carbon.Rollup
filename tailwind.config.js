@@ -1,32 +1,15 @@
-// tailwind.config.js
-const defaultTheme = require("tailwindcss/defaultTheme");
-
 module.exports = {
-    theme: {
-        extend: {
-            screens: {
-                light: { raw: "(prefers-color-scheme: light)" },
-                dark: { raw: "(prefers-color-scheme: dark)" },
-            },
-            maxWidth: (theme) => ({
-                "screen-md-p": `calc(${theme("screens.md")} + ${theme("spacing.8")})`,
-            }),
-            fontFamily: {
-                sans: ["HeroNew", ...defaultTheme.fontFamily.sans],
-            },
-            padding: (theme) => ({
-                ...theme("spacing"),
-                "1/1": "100%",
-                "768/525": 100 / (768 / 525) + "%",
-            }),
-            listStyleType: {
-                square: "square",
-            },
-        },
-    },
     purge: [
         "./DistributionPackages/**/*.fusion",
         "./DistributionPackages/**/*.html",
         "./Data/Temporary/Development/MonocleViews/**/*.html",
     ],
+    darkMode: false, // or 'media' or 'class'
+    theme: {
+        extend: {},
+    },
+    variants: {
+        extend: {},
+    },
+    plugins: [],
 };
