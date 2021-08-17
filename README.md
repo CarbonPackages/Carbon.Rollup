@@ -268,7 +268,7 @@ To enable the correct linting, edit [`.eslintrc`]:
 [postcss-banner]: https://www.npmjs.com/package/postcss-banner
 [postcss-reporter]: https://www.npmjs.com/package/postcss-reporter
 [carbon.pipeline]: https://github.com/CarbonPackages/Carbon.Pipeline#readme
-[logo]: https://repository-images.githubusercontent.com/377838441/8d66c680-d27d-11eb-99a4-85ab35081318
+[logo]: https://repository-images.githubusercontent.com/377838441/de0f0b80-d2df-11eb-86a9-7988d27d4ab0
 [esbuild]: https://esbuild.github.io
 [postcss]: https://postcss.org
 [typescript]: https://www.typescriptlang.org
